@@ -1,153 +1,142 @@
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import {
-  FormControlLabel,
-  Radio,
-  Button,
-  TextareaAutosize,
-} from "@mui/material";
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 
-const Counter = () => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(2),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
-  const onSubmit = (data) => {
-    console.log(data); // Handle form submission logic here
-  };
-
+const FormField = ({ label, key, helperText, placeholder, type, options, heading}) => {
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/* Text Field */}
-      <Controller
-        name="textField"
-        control={control}
-        defaultValue=""
-        render={({ field }) => (
-          <TextField
-            {...field}
-            label="Text Field"
-            error={!!errors.textField}
-            helperText={errors.textField?.message}
-          />
-        )}
+    <React.Fragment>
+      <Typography variant="h6" gutterBottom sx={{ fontSize: '1rem', textAlign: 'left', fontWeight: 'bold'}}>
+        {heading}
+      </Typography>
+      {type === 'dropdown' ? (
+        <TextField
+        
+        label={label}
+        key={key}
+        helperText={helperText}
+        fullWidth={true}
+      >
+        {options &&
+          options.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+      </TextField>
+    
+    ): type == 'checkbox' ? (
+      <div >
+        {options &&
+          options.map((option) => (
+            <div key={option.label}>
+              <input type="checkbox" id={option.label} defaultChecked={option.checked} />
+              <label htmlFor={option.label}>{option.label}</label>
+            </div>
+          ))}
+      </div> 
+      ): (
+      <TextField
+        varient="outlined"
+        size="small"
+
+        fullWidth
       />
-
-      {/* Number Field */}
-      <Controller
-        name="numberField"
-        control={control}
-        defaultValue=""
-        render={({ field }) => (
-          <TextField
-            {...field}
-            type="number"
-            label="Number Field"
-            error={!!errors.numberField}
-            helperText={errors.numberField?.message}
-          />
-        )}
-      />
-
-      {/* Select Field */}
-      <Controller
-        name="selectField"
-        control={control}
-        defaultValue=""
-        render={({ field }) => (
-          <FormControl>
-            <InputLabel>Select Field</InputLabel>
-            <Select
-              {...field}
-              label="Select Field"
-              error={!!errors.selectField}
-              helperText={errors.selectField?.message}
-            >
-              <MenuItem value="option1">Option 1</MenuItem>
-              <MenuItem value="option2">Option 2</MenuItem>
-              <MenuItem value="option3">Option 3</MenuItem>
-            </Select>
-          </FormControl>
-        )}
-      />
-
-      {/* Multi-Select Field */}
-      <Controller
-        name="multiSelectField"
-        control={control}
-        defaultValue={[]}
-        render={({ field }) => (
-          <FormControl>
-            <InputLabel>Multi-Select Field</InputLabel>
-            <Select
-              {...field}
-              label="Multi-Select Field"
-              multiple
-              error={!!errors.multiSelectField}
-              helperText={errors.multiSelectField?.message}
-            >
-              <MenuItem value="value1">Value 1</MenuItem>
-              <MenuItem value="value2">Value 2</MenuItem>
-              <MenuItem value="value3">Value 3</MenuItem>
-            </Select>
-          </FormControl>
-        )}
-      />
-
-      {/* Radio Field */}
-      <FormControl>
-        <InputLabel>Radio Field</InputLabel>
-        <Controller
-          name="radioField"
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <>
-              <FormControlLabel
-                control={<Radio {...field} />}
-                label="Option 1"
-              />
-              <FormControlLabel
-                control={<Radio {...field} />}
-                label="Option 2"
-              />
-              <FormControlLabel
-                control={<Radio {...field} />}
-                label="Option 3"
-              />
-            </>
-          )}
-        />
-      </FormControl>
-
-      {/* Text Area */}
-      <Controller
-        name="textArea"
-        control={control}
-        defaultValue=""
-        render={({ field }) => (
-          <TextareaAutosize
-            {...field}
-            minRows={3}
-            placeholder="Text Area"
-            style={{ width: "100%" }}
-            error={!!errors.textArea}
-          />
-        )}
-      />
-
-      <Button type="submit" variant="contained" color="primary">
-        Submit
-      </Button>
-    </form>
+    )}
+  </React.Fragment>
   );
 };
 
-export default Counter;
+const BasicGrid = () => {
+  
+  const formFields = [
+    {
+      label: 'Label',
+      key: 'labelField',
+      helperText: 'Enter label text',
+      placeholder: 'Label',
+      type: 'text',
+      heading: 'Label',
+    },
+    {
+      label: 'Key',
+      key: 'keyField',
+      helperText: 'Enter key text',
+      placeholder: 'Key',
+      type: 'text',
+      heading: 'Key',
+    },
+    {
+      label: 'Helper Text',
+      key: 'helperTextField',
+      helperText: 'Enter helper text',
+      placeholder: 'Helper Text',
+      type: 'text',
+      heading: 'Helper Text',
+    },
+    {
+      label: 'Placeholder',
+      key: 'placeholderField',
+      helperText: 'Enter placeholder text',
+      placeholder: 'Placeholder',
+      type: 'text',
+      heading: 'Place Holder',
+    },
+    {
+      label: 'Type',
+      key: 'typeField',
+      helperText: 'Select type',
+      type: 'dropdown',
+      options: [
+        { value: 'text', label: 'Text' },
+        { value: 'number', label: 'Number' },
+      ],
+      heading: 'Type',
+    },
+    {
+      type: 'checkbox',
+      options: [
+        { label: 'Yes', checked: false},
+        
+      ],
+      heading: 'System Field',
+    },
+    
+  ];
+
+  return (
+    <Box sx={{ width: '100%', marginTop: 10, marginLeft:0 }}>
+      <Grid container spacing={2}>
+        {formFields.map((field) => (
+          <Grid item key={field.key} xs={12} sm={6} md={6}>
+            <Item>
+              <FormField {...field} />
+            </Item>
+          </Grid>
+        ))}
+        <Grid item xs={12}>
+          <Item>
+            <Button type="submit" variant="contained" color="primary">
+              Submit
+            </Button>
+          </Item>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
+
+export default BasicGrid;

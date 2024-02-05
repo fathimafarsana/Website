@@ -4,7 +4,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginComponent from "./LoginComponent";
 import MyComponent from "./MyComponent";
 import Home from "./Home";
+import Layout from "./Layout";
+import FormBuilder from './FormBuilder';
 import Counter from "./Counter";
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -18,11 +22,22 @@ const App = () => {
         />
         <Route
           path="/my-component"
-          element={<MyComponent isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />}
+          element={
+            <Layout>
+              <DndProvider backend={HTML5Backend}>
+                <MyComponent
+                  isAuthenticated={isAuthenticated}
+                  setIsAuthenticated={setIsAuthenticated}
+                />
+              </DndProvider>
+            </Layout>
+          }
         />
-      <Route path="home" exact component={Home} />
-
-      <Route path="counter" exact component={Counter} />
+        <Route path="/form-builder" element={<Layout><FormBuilder /></Layout>} />
+        <Route path="/home" element={<Layout><Home /></Layout>} />
+        {isAuthenticated && (
+          <Route path="/counter" element={<Layout><Counter /></Layout>} />
+        )}
       </Routes>
     </Router>
   );
